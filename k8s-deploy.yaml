@@ -1,0 +1,145 @@
+# --------------------------
+# Persistent Volume
+# --------------------------
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: obj-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /mnt/obj-data
+
+---
+# --------------------------
+# Frontend Deployment
+# --------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: obj-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: obj-frontend
+  template:
+    metadata:
+      labels:
+        app: obj-frontend
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: minikube-m02  
+      containers:
+        - name: frontend
+          image: truong1301/ui_ux:v1.0.4
+          ports:
+            - containerPort: 8501
+
+---
+# --------------------------
+# Frontend Service
+# --------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  type: ClusterIP
+  selector:
+    app: obj-frontend
+  ports:
+    - protocol: TCP
+      port: 8501
+      targetPort: 8501
+
+---
+# --------------------------
+# Backend Deployment
+# --------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: obj-data
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: obj-d
+  template:
+    metadata:
+      labels:
+        app: obj-d
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: minikube-m02  
+      containers:
+        - name: obj-d
+          image: truong1301/obj_d:v1.0.0
+          ports: 
+            - containerPort: 30000
+
+---
+# --------------------------
+# Backend Service
+# --------------------------
+apiVersion: v1
+kind: Service  
+metadata:
+  name: obj-service
+spec:
+  type: ClusterIP
+  selector:
+    app: obj-d
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 30000
+
+---
+# --------------------------
+# Ingress
+# --------------------------
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: obj-ingress
+spec:
+  rules:
+  - http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: frontend-service
+              port:
+                number: 8501
+
+        - path: /metadata
+          pathType: Prefix
+          backend:
+            service:
+              name: obj-service
+              port:
+                number: 5000
+
+        - path: /inference
+          pathType: Prefix
+          backend:
+            service:
+              name: obj-service
+              port:
+                number: 5000
+
+        - path: /cache_inference
+          pathType: Prefix
+          backend:
+            service:
+              name: obj-service
+              port:
+                number: 5000
+

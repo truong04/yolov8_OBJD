@@ -1,0 +1,54 @@
+# Docker compose spec https://github.com/compose-spec/compose-spec/blob/master/spec.md#depends_on
+version: '3.9'
+
+services:
+  obj_module: 
+    image: truong1301/obj_d:v1.0.0
+    container_name: obj_d
+    ports:
+      - "30000:30000" # host:container
+    # env_file: .env
+    networks:
+      - truong-mlop
+    # volumes:
+    #   - mlflow_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:30000/metadata || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ui_ux_module:
+    # build:
+    #   context: mlflow/
+    #   args:
+    #     MLFLOW_VERSION: ${MLFLOW_VERSION}
+    image: truong1301/ui_ux:v1.0.0
+    container_name: ui_ux
+    ports:
+      - "8501:8501"
+    # env_file: .env
+    networks:
+      - truong-mlop
+    # volumes:
+    #   - mlflow_data:/mlflow
+    depends_on:
+      obj_module:
+        condition: service_healthy
+    healthcheck:
+      #test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      test: ["CMD-SHELL", "curl -f http://localhost:8501 || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+
+# volumes:
+#   mlflow_db_data:
+#   mlflow_data:
+
+networks:
+  truong-mlop:
+
+#truong1301/ui_ux
+#truong1301/obj_d

@@ -1,0 +1,13 @@
+ultralytics == 8.3.179
+opencv-python == 4.12.0.88
+numpy == 2.0.2
+argparse
+fastapi==0.100.0
+imagehash==4.3.1
+websockets==11.0.3
+python-multipart==0.0.6
+Pillow==9.5.0
+loguru==0.7.0
+uvicorn[standard]==0.22.0
+typing
+tqdm==4.66.4
