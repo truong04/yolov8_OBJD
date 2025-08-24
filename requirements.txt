@@ -13,3 +13,4 @@ typing
 tqdm==4.66.4
 streamlit
 requests
+pytest
