@@ -17,8 +17,8 @@ pipeline {
         stage('Build & Push') {
             when {
                 anyOf {
-                    changeset "**/backend/**"
-                    changeset "**/frontend/**"
+                    changeset "**/model/**"
+                    changeset "**/UI_UX/**"
                     changeset "Dockerfile.backend"
                     changeset "Dockerfile.frontend"
                 }
@@ -74,8 +74,8 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    echo '🔎 Waiting 20 seconds for containers to start...'
-                    sh 'sleep 20'
+                    echo '🔎 Waiting 60 seconds for containers to start...'
+                    sh 'sleep 60'
                 
                     echo '🔎 Testing API endpoints...'
                     sh 'curl -f http://localhost:30000/metadata'
