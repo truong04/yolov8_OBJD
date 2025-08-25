@@ -19,8 +19,10 @@ pipeline {
             steps {
                 script {
                     echo '🐳 Building backend image for deploy...'
-                    dockerImage_backend = docker.build("${registry_backend}:1.0.${BUILD_NUMBER}")
-
+                    dockerImage_backend = docker.build(
+                        "${registry_backend}:1.0.${BUILD_NUMBER}",
+                        "-f model/Dockerfile"
+                    )
                     echo '📤 Pushing backend image to DockerHub...'
                     docker.withRegistry('', registryCredential) {
                         dockerImage_backend.push()
@@ -28,8 +30,10 @@ pipeline {
                     }
 
                     echo '🐳 Building frontend image for deploy...'
-                    dockerImage_frontend = docker.build("${registry_frontend}:1.0.${BUILD_NUMBER + 4}")
-
+                    dockerImage_backend = docker.build(
+                        "${registry_frontend}:1.0.${BUILD_NUMBER + 4}",
+                        "-f UI_UX/Dockerfile"
+                    )
                     echo '📤 Pushing frontend image to DockerHub...'
                     docker.withRegistry('', registryCredential) {
                         dockerImage_frontend.push()
