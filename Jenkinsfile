@@ -50,6 +50,13 @@ pipeline {
             steps {
                 script {
                     echo '🚀 Deploying with docker-compose...'
+                    sh '''
+                    NETWORK_NAME=$(docker network ls --filter name=mlops-lab02_main_truong-mlop -q)
+                    if [ ! -z "$NETWORK_NAME" ]; then
+                        echo "🔹 Removing existing network $NETWORK_NAME..."
+                        docker network rm $NETWORK_NAME
+                    fi
+                    '''
                     sh 'docker-compose -f OBD-docker-compose.yaml up -d --build'
                 }
             }
