@@ -74,8 +74,8 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    echo '🔎 Waiting 10 seconds for containers to start...'
-                    sh 'sleep 10'
+                    echo '🔎 Waiting 20 seconds for containers to start...'
+                    sh 'sleep 20'
                 
                     echo '🔎 Testing API endpoints...'
                     sh 'curl -f http://localhost:30000/metadata'
