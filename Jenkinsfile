@@ -75,9 +75,21 @@ pipeline {
             steps {
                 script {
                     echo '🔎 Waiting for containers to be healthy...'
-                    sh 'docker-compose -f OBD-docker-compose.yaml wait obj_module'
-                    sh 'docker-compose -f OBD-docker-compose.yaml wait ui_ux_module'
-
+                
+                    def wait_for_healthy = { container_name ->
+                        sh """
+                        STATUS=""
+                        until [ "\$STATUS" == "healthy" ]; do
+                            STATUS=\$(docker inspect --format='{{.State.Health.Status}}' $container_name 2>/dev/null || echo "starting")
+                            echo "Waiting for $container_name... Status: \$STATUS"
+                            sleep 2
+                        done
+                        """
+                    }
+                
+                    wait_for_healthy("obj_module")
+                    wait_for_healthy("ui_ux_module")
+                
                     echo '🔎 Testing API endpoints...'
                     sh 'curl -f http://localhost:30000/metadata'
                     sh 'curl -f http://localhost:8501'
