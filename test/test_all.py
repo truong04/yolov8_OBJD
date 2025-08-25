@@ -6,7 +6,7 @@ FASTAPI_URL = "http://localhost:30000"   # nếu chạy local thì đổi obj-se
 
 def test_inference_returns_poly_and_score():
     # Gán cứng đường dẫn ảnh test
-    img_path = "/home/truong/MLOPS/LAB-02/images/boats.jpg"   # bạn tạo folder tests/data và bỏ 1 ảnh jpg vào đó
+    img_path = "images/boats.jpg"   # bạn tạo folder tests/data và bỏ 1 ảnh jpg vào đó
 
     # Mở ảnh để gửi
     with open(img_path, "rb") as f:
