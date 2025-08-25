@@ -49,7 +49,15 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    echo '🚀 Deploying with docker-compose...'
+                    sh '''
+                    CONTAINER_NAME=obj_d
+                    if [ $(docker ps -aq -f name=$CONTAINER_NAME) ]; then
+                        echo "🔹 Removing existing container $CONTAINER_NAME..."
+                        docker rm -f $CONTAINER_NAME
+                    fi
+                    '''
+        
+                    // Remove old network if exists
                     sh '''
                     NETWORK_NAME=$(docker network ls --filter name=mlops-lab02_main_truong-mlop -q)
                     if [ ! -z "$NETWORK_NAME" ]; then
