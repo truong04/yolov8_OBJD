@@ -3,7 +3,7 @@ version: '3.9'
 
 services:
   obj_module: 
-    image: truong1301/obj_d:latest
+    image: truong1301/obj_d:v1.0.0
     container_name: obj_d
     ports:
       - "30000:30000" # host:container
@@ -23,7 +23,7 @@ services:
     #   context: mlflow/
     #   args:
     #     MLFLOW_VERSION: ${MLFLOW_VERSION}
-    image: truong1301/ui_ux:latest
+    image: truong1301/ui_ux:v1.0.4
     container_name: ui_ux
     ports:
       - "8501:8501"
