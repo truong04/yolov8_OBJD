@@ -29,6 +29,8 @@ pipeline{
             }
             steps{
                 echo '🔎 Testing model...'
+                sh 'sleep 10' // đợi container chạy ổn định
+                sh 'curl -f http://localhost:8080/metadata'
                 sh 'pip install -r requirements.txt && pytest'
             }
         }
