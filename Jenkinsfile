@@ -74,21 +74,8 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    echo '🔎 Waiting for containers to be healthy...'
-                
-                    def wait_for_healthy = { container_name ->
-                        sh """
-                        STATUS=""
-                        until [ "\$STATUS" == "healthy" ]; do
-                            STATUS=\$(docker inspect --format='{{.State.Health.Status}}' $container_name 2>/dev/null || echo "starting")
-                            echo "Waiting for $container_name... Status: \$STATUS"
-                            sleep 2
-                        done
-                        """
-                    }
-                
-                    wait_for_healthy("obj_module")
-                    wait_for_healthy("ui_ux_module")
+                    echo '🔎 Waiting 10 seconds for containers to start...'
+                    sh 'sleep 10'
                 
                     echo '🔎 Testing API endpoints...'
                     sh 'curl -f http://localhost:30000/metadata'
