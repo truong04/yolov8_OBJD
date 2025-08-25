@@ -15,14 +15,7 @@ pipeline {
     stages {
 
         stage('Build & Push') {
-            when {
-                anyOf {
-                    changeset "**/model/**"
-                    changeset "**/UI_UX/**"
-                    changeset "Dockerfile.backend"
-                    changeset "Dockerfile.frontend"
-                }
-            }
+
             steps {
                 script {
                     echo '🐳 Building backend image for deploy...'
