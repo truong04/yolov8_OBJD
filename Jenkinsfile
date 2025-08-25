@@ -14,6 +14,13 @@ pipeline{
     }
 
     stages{
+        stage('Deploy with Docker Compose') {
+            steps {
+                script {
+                    sh 'docker compose -f OBD-docker-compose.yaml up -d --build'
+                }
+            }
+        }
         stage('Test'){
             agent {
                 docker {
