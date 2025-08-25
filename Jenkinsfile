@@ -50,11 +50,12 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    CONTAINER_NAME=obj_d
-                    if [ $(docker ps -aq -f name=$CONTAINER_NAME) ]; then
-                        echo "🔹 Removing existing container $CONTAINER_NAME..."
-                        docker rm -f $CONTAINER_NAME
-                    fi
+                    for CONTAINER in obj_d ui_ux; do
+                        if [ $(docker ps -aq -f name=$CONTAINER) ]; then
+                            echo "🔹 Removing existing container $CONTAINER..."
+                            docker rm -f $CONTAINER
+                        fi
+                    done
                     '''
         
                     // Remove old network if exists
