@@ -2,8 +2,8 @@ import requests
 import os
 
 # URL của FastAPI service (phải đang chạy thì test mới pass)
-# FASTAPI_URL = "http://localhost:30000"   # nếu chạy local thì đổi obj-service -> localhost
-FASTAPI_URL = "http://obj-service:30000"
+FASTAPI_URL = "http://localhost:30000"   # nếu chạy local thì đổi obj-service -> localhost
+# FASTAPI_URL = "http://obj-service:30000"
 
 def test_inference_returns_poly_and_score():
     # Gán cứng đường dẫn ảnh test
