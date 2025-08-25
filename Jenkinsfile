@@ -50,7 +50,7 @@ pipeline {
             steps {
                 script {
                     echo '🚀 Deploying with docker-compose...'
-                    sh 'docker compose -f OBD-docker-compose.yaml up -d --build'
+                    sh 'docker-compose -f OBD-docker-compose.yaml up -d --build'
                 }
             }
         }
@@ -59,8 +59,8 @@ pipeline {
             steps {
                 script {
                     echo '🔎 Waiting for containers to be healthy...'
-                    sh 'docker compose -f OBD-docker-compose.yaml wait obj_module'
-                    sh 'docker compose -f OBD-docker-compose.yaml wait ui_ux_module'
+                    sh 'docker-compose -f OBD-docker-compose.yaml wait obj_module'
+                    sh 'docker-compose -f OBD-docker-compose.yaml wait ui_ux_module'
 
                     echo '🔎 Testing API endpoints...'
                     sh 'curl -f http://localhost:30000/metadata'
