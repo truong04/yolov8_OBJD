@@ -1,17 +1,18 @@
-pipeline{
+pipeline {
     agent any
 
-    options{
+    options {
         buildDiscarder(logRotator(numToKeepStr: '5', daysToKeepStr: '5'))
         timestamps()
     }
 
-    environment{
-        registry_backend = 'truong1301/obj_d'
-        registry_frontend = 'truong1301/ui_ux'
-        //:v1.0.0
+    environment {
+        registry_backend   = 'truong1301/obj_d'
+        registry_frontend  = 'truong1301/ui_ux'
         registryCredential = 'dockerhub'
     }
+
+    stages {
 
         stage('Build & Push') {
             when {
@@ -26,16 +27,16 @@ pipeline{
                 script {
                     echo '🐳 Building backend image for deploy...'
                     dockerImage_backend = docker.build("${registry_backend}:1.0.${BUILD_NUMBER}")
-        
+
                     echo '📤 Pushing backend image to DockerHub...'
                     docker.withRegistry('', registryCredential) {
                         dockerImage_backend.push()
                         dockerImage_backend.push('latest')
                     }
-        
+
                     echo '🐳 Building frontend image for deploy...'
                     dockerImage_frontend = docker.build("${registry_frontend}:1.0.${BUILD_NUMBER + 4}")
-        
+
                     echo '📤 Pushing frontend image to DockerHub...'
                     docker.withRegistry('', registryCredential) {
                         dockerImage_frontend.push()
@@ -45,7 +46,6 @@ pipeline{
             }
         }
 
-
         stage('Deploy') {
             steps {
                 script {
@@ -54,23 +54,19 @@ pipeline{
                 }
             }
         }
-        
+
         stage('Test') {
             steps {
                 script {
                     echo '🔎 Waiting for containers to be healthy...'
-                    // Chờ backend obj_module đạt trạng thái healthy
                     sh 'docker compose -f OBD-docker-compose.yaml wait obj_module'
                     sh 'docker compose -f OBD-docker-compose.yaml wait ui_ux_module'
-        
+
                     echo '🔎 Testing API endpoints...'
-                    // Kiểm tra endpoint backend
                     sh 'curl -f http://localhost:30000/metadata'
-                    // Kiểm tra frontend
                     sh 'curl -f http://localhost:8501'
                 }
             }
-}
-
+        }
     }
 }
