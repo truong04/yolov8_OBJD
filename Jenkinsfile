@@ -55,7 +55,7 @@ pipeline {
                         fi
                     done
                     '''
-        
+            
                     // Remove old network if exists
                     sh '''
                     NETWORK_NAME=$(docker network ls --filter name=mlops-lab02_main_truong-mlop -q)
@@ -64,7 +64,22 @@ pipeline {
                         docker network rm $NETWORK_NAME
                     fi
                     '''
+        
+                    // Run docker-compose
                     sh 'docker-compose -f OBD-docker-compose.yaml up -d --build'
+        
+                    // 🔹 Ensure Jenkins container is connected to truong-mlop network
+                    sh '''
+                    JENKINS_ID=$(docker ps -q -f name=jenkins)
+                    if [ ! -z "$JENKINS_ID" ]; then
+                        if ! docker network inspect truong-mlop | grep -q $JENKINS_ID; then
+                            echo "🔹 Connecting Jenkins container to truong-mlop network..."
+                            docker network connect truong-mlop $JENKINS_ID
+                        else
+                            echo "🔹 Jenkins already connected to truong-mlop"
+                        fi
+                    fi
+                    '''
                 }
             }
         }
@@ -76,8 +91,8 @@ pipeline {
                     sh 'sleep 60'
                 
                     echo '🔎 Testing API endpoints...'
-                    sh 'curl -f http://host.docker.internal:30000'
-                    sh 'curl -f http://localhost:8501'
+                    sh 'curl -f http://obj_d:30000/metadata'
+                    sh 'curl -f http://ui_ux:8501'
                 }
             }
         }
