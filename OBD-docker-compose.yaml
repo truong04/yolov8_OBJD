@@ -13,7 +13,7 @@ services:
     # volumes:
     #   - mlflow_db_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://127.0.0.1:30000/metadata || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:30000/metadata || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
