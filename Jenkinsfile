@@ -76,7 +76,7 @@ pipeline {
                     sh 'sleep 60'
                 
                     echo '🔎 Testing API endpoints...'
-                    sh 'curl -f http://127.0.0.1:30000'
+                    sh 'curl -f http://host.docker.internal:30000'
                     sh 'curl -f http://localhost:8501'
                 }
             }
