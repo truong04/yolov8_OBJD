@@ -97,7 +97,7 @@ pipeline {
                     sh 'sleep 60'
                 
                     echo '🔎 Testing API endpoints...'
-                    sh 'curl -f http://obj_d:30000/metadata'
+                    sh 'curl -f http://obj_module:30000/metadata'
                     sh 'curl -f http://ui_ux:8501'
                 }
             }
