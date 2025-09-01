@@ -58,12 +58,13 @@ pipeline {
             
                     // Remove old network if exists
                     sh '''
-                    NETWORK_NAME=$(docker network ls --filter name=mlops-lab02_main_truong-mlop -q)
+                    NETWORK_NAME=$(docker network ls --filter name=truong-mlop -q)
                     if [ ! -z "$NETWORK_NAME" ]; then
                         echo "🔹 Removing existing network $NETWORK_NAME..."
                         docker network rm $NETWORK_NAME
                     fi
                     '''
+
         
                     // Run docker-compose
                     sh 'docker-compose -f OBD-docker-compose.yaml up -d --build'
