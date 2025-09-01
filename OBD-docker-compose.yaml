@@ -2,7 +2,7 @@
 version: '3.9'
 
 services:
-  obj_module: 
+  obj-service: 
     image: truong1301/obj_d:v1.0.0
     container_name: obj_d
     ports:
@@ -33,7 +33,7 @@ services:
     # volumes:
     #   - mlflow_data:/mlflow
     depends_on:
-      obj_module:
+      obj-service:
         condition: service_healthy
     healthcheck:
       #test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
