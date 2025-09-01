@@ -49,6 +49,7 @@ services:
 
 networks:
   truong-mlop:
+    name: truong-mlop   # ép tên mạng Docker
 
 #truong1301/ui_ux
 #truong1301/obj_d
