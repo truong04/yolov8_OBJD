@@ -19,8 +19,15 @@ if uploaded_file is not None:
     st.image(image, caption="Uploaded Image", use_column_width=True)
 
     files = {"file": uploaded_file.getvalue()}
-    response = requests.post(f"{FASTAPI_URL}/cache_inference", files=files)
-
+    try:
+        response = requests.post(f"{FASTAPI_URL}/cache_inference", files=files)
+        response.raise_for_status()  # nếu server trả về lỗi (400/500) sẽ raise
+        st.write("✅ Thành công:", response.json())
+    except requests.exceptions.RequestException as e:
+        st.error(f"❌ Lỗi khi gọi API: {e}")
+        st.write("URL:", f"{FASTAPI_URL}/cache_inference")
+        st.write("Files gửi đi:", files)
+    
     if response.status_code == 200:
         result = response.json()
         st.subheader("Detection Results (JSON)")
