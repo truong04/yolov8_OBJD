@@ -60,6 +60,11 @@ pipeline {
                     sh '''
                     NETWORK_NAME=$(docker network ls --filter name=truong-mlop -q)
                     if [ ! -z "$NETWORK_NAME" ]; then
+                        JENKINS_ID=$(docker ps -q -f name=jenkins)
+                        if [ ! -z "$JENKINS_ID" ]; then
+                            echo "🔹 Disconnecting Jenkins from network $NETWORK_NAME..."
+                            docker network disconnect $NETWORK_NAME $JENKINS_ID || true
+                        fi
                         echo "🔹 Removing existing network $NETWORK_NAME..."
                         docker network rm $NETWORK_NAME
                     fi
