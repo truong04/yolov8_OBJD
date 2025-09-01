@@ -6,7 +6,7 @@ import numpy as np
 from PIL import Image
 import os
 
-FASTAPI_URL = "http://obj_module:30000"
+FASTAPI_URL = "http://obj_d:30000"
 st.title("YOLO OBB INFERENCE DEMO")
 
 uploaded_file = st.file_uploader("upload file", type=["jpg", "png", "jpeg"])
